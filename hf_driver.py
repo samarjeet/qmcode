@@ -66,11 +66,18 @@ def buildBasis(z, al):
             basis.append(b);
     return [basis, n]
 
+def buildOverlap(basis):
+  # calculate the overlap of the basis sets
+
+  for ba in  basis :
+    for bb in basis :
+      #print(ba.numGaussians, bb.numGaussians)
+      
 def main():
     z = [1, 1, 1];
     al = [[0,0,1], [0, 0, -1], [0,0,3]]
     basis, n  = buildBasis(z, al);
-    print(n)
-    print(basis)
+
+    s = buildOverlap(basis);
 if __name__ == '__main__' :
     main();
