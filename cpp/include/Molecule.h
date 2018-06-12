@@ -7,7 +7,7 @@
 #include<vector>
 #include<string>
 
-typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> Matrix;
+//typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixXf;
 typedef Eigen::Matrix<double, Eigen::Dynamic, 1, 1> Vector;
 
 class Molecule {
@@ -19,11 +19,13 @@ public :
   std::vector<std::vector<float>> hessian;
   std::vector<int> zvals;
 
-  Matrix I; 
-  Eigen::Matrix3f t; 
+  //Matrix I; 
+  Eigen::Matrix3f ten; 
   Eigen::Matrix3f evecs;
-  //auto evalues; 
-
+  Eigen::MatrixXf hessEigen; //(3*nAtom, 3*nAtom);
+  Eigen::MatrixXf diagEvecs;
+  Eigen::VectorXf diagEvals;
+  Eigen::VectorXf frequencies;
   Molecule(){};
   ~Molecule(){};
 
@@ -40,6 +42,21 @@ public :
   //std::vector<std::vector<float>> moment();
   //Matrix moment();
   Eigen::Matrix3f moment();
+
+  // for scf
+  float enuc;
+  int totalNumOrbitals;
+  Eigen::MatrixXf s; // overlap 
+  Eigen::MatrixXf t; // kinetic energy
+  Eigen::MatrixXf v; // nuclear attraction integrals
+  Eigen::MatrixXf ch; // core hamiltonian 
+  std::vector<float>
+  void readEnuc(std::string fileName);
+  void readOverlap(std::string fileName);
+  void readKinetic(std::string fileName);
+  void readNuclearAttraction(std::string fileName);
+  void calculateCoreHamiltonian();
+
 };
 
 #endif

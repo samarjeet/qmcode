@@ -2,19 +2,22 @@
 #include"constants.h"
 #include<fstream>
 #include<cmath>
+#include<numeric>
 
 void Molecule::readGeometry(std::string fileName){
 
   std::ifstream input(fileName);
   input >> nAtom ;
   int atomicNum;
-  float x,y,z;
+  float an,x,y,z;
 
   std::vector<float> coord;
 
   for (int i=0; i < nAtom ; ++i)  {
-    input >> atomicNum >> x >> y >> z;
+    input >> an >> x >> y >> z;
+    atomicNum = (int)an;
     zvals.push_back(atomicNum);
+
     coord.clear();
     
     coord.push_back(x);
@@ -145,20 +148,20 @@ Eigen::Matrix3f Molecule::moment(){
 
     i++;
   }
-  t(0,0) = tensor[0][0];
-  t(0,1) = tensor[0][1];
-  t(0,2) = tensor[0][2];
-  t(1,0) = tensor[1][0];
-  t(1,1) = tensor[1][1];
-  t(1,2) = tensor[1][2];
-  t(2,0) = tensor[2][0];
-  t(2,1) = tensor[2][1];
-  t(2,2) = tensor[2][2];
+  ten(0,0) = tensor[0][0];
+  ten(0,1) = tensor[0][1];
+  ten(0,2) = tensor[0][2];
+  ten(1,0) = tensor[1][0];
+  ten(1,1) = tensor[1][1];
+  ten(1,2) = tensor[1][2];
+  ten(2,0) = tensor[2][0];
+  ten(2,1) = tensor[2][1];
+  ten(2,2) = tensor[2][2];
 
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> solver(t);
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> solver(ten);
   evecs = solver.eigenvectors();
   auto evals = solver.eigenvalues();
-  return t;
+  return ten;
 }
 
 // Project 2 stuff
@@ -174,20 +177,106 @@ int Molecule::readHessian(std::string fileName){
 
   float val;
   std::vector<float> row;
+  hessEigen.resize(3*nAtom, 3*nAtom);
   for (int i=0; i < 3*nAtom ; ++i){
     row.clear();
     for (int j=0; j < 3*nAtom ; ++j){
         input >> val;
         row.push_back(val);
+        hessEigen(i,j) = val;
     }
     hessian.push_back(row);
   }
 
+  // mass weighting the matrix
   for (int i=0; i < 3*nAtom ; ++i){
     for (int j=0; j < 3*nAtom ; ++j){
-      hessian[i][j] /= sqrt(mass[i]*mass[j]);
+      hessian[i][j] /= sqrt(mass[zvals[i/3]]*mass[zvals[j/3]]);
+      hessEigen(i,j) /=sqrt(mass[zvals[i/3]]*mass[zvals[j/3]]);
+      //hessian[i][j];
     }
   }
 
+  // Diagonalize the matrix
+  // use Eigen library
+  Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(hessEigen);
+  diagEvecs.resize(3*nAtom, 3*nAtom);
+  diagEvals.resize(3*nAtom);
+  frequencies.resize(3*nAtom);
+
+  diagEvecs = solver.eigenvectors();
+  diagEvals = solver.eigenvalues();
+
+
+  for (int i=0; i<3*nAtom; ++i){
+    frequencies(i) = sqrt(diagEvals(i))*5140.43206058;
+  }
   return 1;
 }
+
+void Molecule::readEnuc(std::string fileName){
+  std::ifstream input(fileName);
+  input >> enuc ;
+}
+
+void Molecule::readOverlap(std::string fileName){
+  std::ifstream input(fileName);
+  totalNumOrbitals = 0;
+  for (auto z:zvals) {
+    totalNumOrbitals += numOrbitals[z];
+  }
+  s.resize(totalNumOrbitals, totalNumOrbitals);
+  int i, j;
+  float overlap;
+ 
+  for (int k=0; k < totalNumOrbitals*(totalNumOrbitals+1)/2; ++k){
+    input >> i >> j >> overlap ;
+    s(i-1,j-1) = overlap; 
+    s(j-1,i-1) = overlap; 
+  }
+}
+
+void Molecule::readKinetic(std::string fileName){
+  std::ifstream input(fileName);
+  totalNumOrbitals = 0;
+  for (auto z:zvals) {
+    totalNumOrbitals += numOrbitals[z];
+  }
+  t.resize(totalNumOrbitals, totalNumOrbitals);
+  int i, j;
+  float ke;
+ 
+  for (int k=0; k < totalNumOrbitals*(totalNumOrbitals+1)/2; ++k){
+    input >> i >> j >> ke ;
+    t(i-1,j-1) = ke; 
+    t(j-1,i-1) = ke; 
+  }
+}
+
+void Molecule::readNuclearAttraction(std::string fileName){
+  std::ifstream input(fileName);
+  totalNumOrbitals = 0;
+  for (auto z:zvals) {
+    totalNumOrbitals += numOrbitals[z];
+  }
+  v.resize(totalNumOrbitals, totalNumOrbitals);
+  int i, j;
+  float na;
+ 
+  for (int k=0; k < totalNumOrbitals*(totalNumOrbitals+1)/2; ++k){
+    input >> i >> j >> na ;
+    v(i-1,j-1) = na; 
+    v(j-1,i-1) = na; 
+  }
+}
+
+
+void Molecule::calculateCoreHamiltonian(){
+  ch.resize(totalNumOrbitals, totalNumOrbitals);
+  for (int i=0; i < totalNumOrbitals; ++i) {
+    for (int j=0; j < totalNumOrbitals; ++j) {
+      ch(i,j) = v(i,j) + t(i,j);
+    }
+  }
+}
+

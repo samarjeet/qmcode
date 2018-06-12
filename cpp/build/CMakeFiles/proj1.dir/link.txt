@@ -1,1 +1,0 @@
-/usr/bin/c++    -g    CMakeFiles/proj1.dir/src/Molecule.cpp.o CMakeFiles/proj1.dir/test/proj1.cpp.o  -o proj1 -rdynamic 

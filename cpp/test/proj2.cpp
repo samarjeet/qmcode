@@ -12,7 +12,8 @@ int main(int argc, char* argv[]){
     std::cout << "Error while reading the hessian!\n";
     return 0;
   }
-  std::cout << mol.hessian[1][1];
+  std::cout << "Eigenvalues of the mass weighted Hessian matrix :\n" << mol.diagEvals << "\n";
+  std::cout << "Frequencies :\n" << mol.frequencies << "\n";
   return 0;
 }
 
