@@ -1,1 +1,0 @@
-/v/apps/gcc/7.1.0/bin/g++    -g    CMakeFiles/psitest.dir/src/Molecule.cpp.o CMakeFiles/psitest.dir/src/proj1.cpp.o  -o psitest -rdynamic 
