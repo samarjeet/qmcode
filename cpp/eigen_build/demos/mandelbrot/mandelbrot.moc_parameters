@@ -1,0 +1,7 @@
+-I/home/samar/learning/eigen-git-mirror
+-I/home/samar/learning/qmcode/cpp/eigen_build
+-I/usr/include/qt4
+-DNDEBUG
+-o
+/home/samar/learning/qmcode/cpp/eigen_build/demos/mandelbrot/mandelbrot.moc
+/home/samar/learning/eigen-git-mirror/demos/mandelbrot/mandelbrot.h

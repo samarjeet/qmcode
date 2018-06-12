@@ -1,3 +1,4 @@
-/u/samar/Documents/git/learning/qmcode/cpp/build/CMakeFiles/rebuild_cache.dir
-/u/samar/Documents/git/learning/qmcode/cpp/build/CMakeFiles/edit_cache.dir
-/u/samar/Documents/git/learning/qmcode/cpp/build/CMakeFiles/psitest.dir
+/home/samar/learning/qmcode/cpp/build/CMakeFiles/edit_cache.dir
+/home/samar/learning/qmcode/cpp/build/CMakeFiles/rebuild_cache.dir
+/home/samar/learning/qmcode/cpp/build/CMakeFiles/proj2.dir
+/home/samar/learning/qmcode/cpp/build/CMakeFiles/proj1.dir
