@@ -1,1 +1,0 @@
-/v/apps/gcc/6.3.0-centos7/bin/g++    -g    CMakeFiles/proj3.dir/src/Molecule.cpp.o CMakeFiles/proj3.dir/test/proj3.cpp.o  -o proj3 -rdynamic 

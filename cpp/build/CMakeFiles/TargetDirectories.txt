@@ -1,3 +1,0 @@
-/u/samar/Documents/git/learning/qmcode/cpp/build/CMakeFiles/rebuild_cache.dir
-/u/samar/Documents/git/learning/qmcode/cpp/build/CMakeFiles/edit_cache.dir
-/u/samar/Documents/git/learning/qmcode/cpp/build/CMakeFiles/proj3.dir
