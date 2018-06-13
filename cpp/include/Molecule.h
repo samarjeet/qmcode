@@ -50,13 +50,14 @@ public :
   Eigen::MatrixXf t; // kinetic energy
   Eigen::MatrixXf v; // nuclear attraction integrals
   Eigen::MatrixXf ch; // core hamiltonian 
-  std::vector<float>
+  std::vector<float> eri; // two Electron Repulsion;
+
   void readEnuc(std::string fileName);
   void readOverlap(std::string fileName);
   void readKinetic(std::string fileName);
   void readNuclearAttraction(std::string fileName);
   void calculateCoreHamiltonian();
-
+  void readTwoERepulsion(std::string fileName);
 };
 
 #endif

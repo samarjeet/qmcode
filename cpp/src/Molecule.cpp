@@ -217,6 +217,7 @@ int Molecule::readHessian(std::string fileName){
 void Molecule::readEnuc(std::string fileName){
   std::ifstream input(fileName);
   input >> enuc ;
+  input.close();
 }
 
 void Molecule::readOverlap(std::string fileName){
@@ -234,6 +235,7 @@ void Molecule::readOverlap(std::string fileName){
     s(i-1,j-1) = overlap; 
     s(j-1,i-1) = overlap; 
   }
+  input.close();
 }
 
 void Molecule::readKinetic(std::string fileName){
@@ -251,6 +253,7 @@ void Molecule::readKinetic(std::string fileName){
     t(i-1,j-1) = ke; 
     t(j-1,i-1) = ke; 
   }
+  input.close();
 }
 
 void Molecule::readNuclearAttraction(std::string fileName){
@@ -268,8 +271,8 @@ void Molecule::readNuclearAttraction(std::string fileName){
     v(i-1,j-1) = na; 
     v(j-1,i-1) = na; 
   }
+  input.close();
 }
-
 
 void Molecule::calculateCoreHamiltonian(){
   ch.resize(totalNumOrbitals, totalNumOrbitals);
@@ -279,4 +282,14 @@ void Molecule::calculateCoreHamiltonian(){
     }
   }
 }
+
+void Molecule::readTwoERepulsion(std::string fileName){
+  std::ifstream input(fileName);
+  totalNumOrbitals = 0;
+  for (auto z:zvals) {
+    totalNumOrbitals += numOrbitals[z];
+  }
+  input.close();
+}
+
 

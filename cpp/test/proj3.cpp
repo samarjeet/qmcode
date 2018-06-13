@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
   std::cout << mol.v << "\n" ;
   mol.calculateCoreHamiltonian();
   std::cout << "Core Hamiltonian : \n" << mol.ch << "\n" ;
-  mol.read2eOverlap(path+"v.dat");
+  mol.readTwoERepulsion(path+"eri.dat");
   return 0;
 }
 
